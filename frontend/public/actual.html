@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actual Prices - ACO-BiLSTM</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        canvas {
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #fff;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Actual Stock Prices</h1>
+
+    <div class="card">
+        <canvas id="actualChart"></canvas>
+    </div>
+
+    <footer>
+        &copy; 2026 NeuStock Forecast System
+    </footer>
+
+    <script>
+        // Fetch actual prices from Flask API
+        fetch("http://localhost:5000/api/actual")
+            .then(res => res.json())
+            .then(data => {
+                // Extract dates and close values
+                const dates = data.map(item => item.date);
+                const prices = data.map(item => item.close);
+
+                // Create Chart.js chart
+                const ctx = document.getElementById('actualChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: 'Close Price',
+                            data: prices,
+                            borderColor: '#f76c6c',
+                            backgroundColor: 'rgba(247, 108, 108, 0.2)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                            }
+                        },
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                            },
+                            y: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Price'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(err => console.error("Error fetching data:", err));
+    </script>
+
+</body>
+
+</html>

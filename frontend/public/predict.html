@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict - ACO-BiLSTM</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fddb92, #d1fdff);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        /* Floating chart */
+        .chart-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 20px;
+            max-width: 800px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f76c6c;
+            color: white;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tbody tr:hover {
+            background-color: #ffe0e0;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #333;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            th,
+            td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Prediksi Harga 30 Hari</h1>
+
+    <!-- Floating Chart -->
+    <div class="chart-card">
+        <canvas id="predictChart"></canvas>
+    </div>
+
+    <!-- Tabel -->
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Close</th>
+                </tr>
+            </thead>
+            <tbody id="data"></tbody>
+        </table>
+    </div>
+
+    <footer>
+        &copy; 2026 NeuStock Forecast System
+    </footer>
+
+    <script>
+        fetch("http://localhost:5000/api/predict")
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById("data");
+                const dates = [];
+                const prices = [];
+
+                data.forEach(d => {
+                    dates.push(d.date);
+                    prices.push(d.close.toFixed(2));
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${d.date}</td>
+                            <td>${d.close.toFixed(2)}</td>
+                        </tr>`;
+                });
+
+                // Chart.js
+                const ctx = document.getElementById('predictChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: 'Prediksi Close Price',
+                            data: prices,
+                            borderColor: '#f76c6c',
+                            backgroundColor: 'rgba(247, 108, 108, 0.2)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top'
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Tanggal'
+                                }
+                            },
+                            y: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Harga'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(err => {
+                console.error("Error fetching data:", err);
+                const tbody = document.getElementById("data");
+                tbody.innerHTML = `<tr><td colspan="2">Gagal memuat data</td></tr>`;
+            });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - ACO-BiLSTM Forecast</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #f76c6c;
+        }
+
+        .card p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .developers {
+            margin-top: 20px;
+        }
+
+        .developer {
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        a {
+            color: #f76c6c;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #fff;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>About System</h1>
+
+    <div class="card">
+        <h3>System Info</h3>
+        <p>
+            Model: <strong>ACO-BiLSTM</strong><br>
+            Backend: <strong>Flask API</strong><br>
+            Frontend: <strong>Node.js</strong>
+        </p>
+
+        <div class="developers">
+            <h3>Developers</h3>
+            <p class="developer">1. Nadiyah Shofa Salsabila</p>
+            <p class="developer">2. Callisto Carlos</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 NeuStock Forecast System
+    </footer>
+
+</body>
+
+</html>
