@@ -40,6 +40,3 @@ docker-compose up --build
 ### 3. Jalankan website
 
 http://localhost:3000 (Silahkan akses langsung di browser anda jika sudah berhasil melakukan instalasi lokal)
-
-# Tata cara penggunaan aplikasi
-Berikut ini lampiran tatacara penggunaan aplikasi NeuStock: ...
